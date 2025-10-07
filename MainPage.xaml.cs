@@ -1,7 +1,8 @@
 ﻿using AppJogoDaForca.Repositories;
 using AppJogoDaForca.Models;
 using AppJogoDaForca.Libraries.Text;
-
+using AndroidX.ConstraintLayout.Motion.Widget;
+using System.Threading.Tasks;
 
 namespace AppJogoDaForca
 {
@@ -19,11 +20,13 @@ namespace AppJogoDaForca
 		}
 
 
-		private void OnButtonClicked(object sender, EventArgs e)
+		private async void OnButtonClicked(object sender, EventArgs e)
 		{
+			Button button = ((Button)sender);
+			button.IsEnabled = false;
 
-			((Button)sender).IsEnabled = false;
-			String letter = ((Button)sender).Text;
+
+			String letter = button.Text;
 
 			var positions = _word.Text.GetPositions(letter);
 
@@ -32,10 +35,10 @@ namespace AppJogoDaForca
 			{
 				_errors++;
 				ImgMain.Source = ImageSource.FromFile($"forca{_errors + 1}.svg");
-
+				button.Style = App.Current.Resources.MergedDictionaries.ElementAt(1)["Success"] as Style;
 				if (_errors == 6)
 				{
-					DisplayAlert("Perdeu!", "Você foi enforcado!", "Novo Jogo");
+					await DisplayAlert("Perdeu!", "Você foi enforcado!", "Novo Jogo");
 
 					ResetScreen();
 				}
@@ -52,9 +55,14 @@ namespace AppJogoDaForca
 
 		private void ResetScreen()
 		{
-			_errors = 0;
-			ImgMain.Source = ImageSource.FromFile("forca1.svg");
+			ResetVirtualKeyboard();
+			ResetErrors();
+			GenerateNewWord();
 
+		}
+
+		private void GenerateNewWord()
+		{
 			var repository = new WordRepositories();
 			_word = repository.GetRandomWord();
 
@@ -62,6 +70,28 @@ namespace AppJogoDaForca
 			LblText.Text = new string('_', _word.Text.Length);
 		}
 
+		private void ResetErrors()
+		{
+			_errors = 0;
+			ImgMain.Source = ImageSource.FromFile("forca1.svg");
+		}
+
+
+		private void ResetVirtualKeyboard()
+		{
+			ResetVirtualLines((HorizontalStackLayout)KeyboardContainer.Children[0]);
+			ResetVirtualLines((HorizontalStackLayout)KeyboardContainer.Children[1]);
+			ResetVirtualLines((HorizontalStackLayout)KeyboardContainer.Children[2]);
+		}
+
+		private void ResetVirtualLines(HorizontalStackLayout horizontal)
+		{
+			foreach (Button button in horizontal.Children)
+			{
+				button.IsEnabled = true;
+				button.Style = null;
+			}
+		}
 	}
 
 }
