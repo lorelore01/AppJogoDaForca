@@ -16,6 +16,7 @@ namespace AppJogoDaForca.Repositories
             _words.Add(new Word("Nome", "Maria".ToUpper()));
             _words.Add(new Word("Vegetal", "Cenoura".ToUpper()));
             _words.Add(new Word("Fruta", "Abacate".ToUpper()));
+            _words.Add(new Word("Tempero", "Nordestino".ToUpper()));
             _words.Add(new Word("Tempero", "Baiano".ToUpper()));
         }
 

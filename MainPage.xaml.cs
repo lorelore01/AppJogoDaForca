@@ -33,25 +33,71 @@ namespace AppJogoDaForca
 
 			if (positions.Count == 0)
 			{
-				_errors++;
-				ImgMain.Source = ImageSource.FromFile($"forca{_errors + 1}.svg");
-				button.Style = App.Current.Resources.MergedDictionaries.ElementAt(1)["Success"] as Style;
-				if (_errors == 6)
-				{
-					await DisplayAlert("Perdeu!", "Você foi enforcado!", "Novo Jogo");
-
-					ResetScreen();
-				}
-
+				ErrorHandler(button);
+				await IsGameOver();
 				return;
 			}
 
+			ReplaceLetter(letter, positions);
+
+			button.Style = App.Current.Resources.MergedDictionaries.ElementAt(1)["Success"] as Style;
+
+			await HasWinner();
+		}
+
+
+		private void OnButtonClickedResetGame(object sender, EventArgs e)
+		{
+			ResetScreen();
+		}
+
+		#region Success Handler
+		private void ReplaceLetter(string letter, List<int> positions)
+		{
 			foreach (int position in positions)
 			{
 				LblText.Text = LblText.Text.Remove(position, 1).Insert(position, letter);
 
 			}
 		}
+
+
+		private async Task HasWinner()
+		{
+			if (!LblText.Text.Contains("_"))
+			{
+				await DisplayAlert("Parabéns!", "Você ganhou o jogo!", "Novo Jogo");
+				ResetScreen();
+			}
+		}
+		#endregion
+
+		#region Error Handler 
+
+
+		private async Task IsGameOver()
+		{
+			if (_errors == 6)
+			{
+				await DisplayAlert("Perdeu!", "Você foi enforcado!", "Novo Jogo");
+
+				ResetScreen();
+			}
+
+		}
+
+		private void ErrorHandler(Button button)
+		{
+			_errors++;
+			ImgMain.Source = ImageSource.FromFile($"forca{_errors + 1}.svg");
+			button.Style = App.Current.Resources.MergedDictionaries.ElementAt(1)["Failure"] as Style;
+		}
+
+
+		#endregion
+
+		#region Reset Screen - Screen Goes Back To Initial State 
+
 
 		private void ResetScreen()
 		{
@@ -92,6 +138,9 @@ namespace AppJogoDaForca
 				button.Style = null;
 			}
 		}
+
+		#endregion
+
 	}
 
 }
