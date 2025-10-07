@@ -1,11 +1,19 @@
-﻿namespace AppJogoDaForca;
+﻿using AppJogoDaForca.Repositories;
 
-public partial class MainPage : ContentPage
+namespace AppJogoDaForca
 {
 
-	public MainPage()
+	public partial class MainPage : ContentPage
 	{
-		InitializeComponent();
+
+		public MainPage()
+		{
+			InitializeComponent();
+
+			var repository = new WordRepositories();
+			_word = repository.GetRandomWord
+		}
+
 	}
 
 }
