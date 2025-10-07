@@ -31,7 +31,7 @@ namespace AppJogoDaForca
 			if (positions.Count == 0)
 			{
 				_errors++;
-				imgMain.Source = ImageSource.FromFile($"forca{_errors + 1}.svg");
+				ImgMain.Source = ImageSource.FromFile($"forca{_errors + 1}.svg");
 
 				if (_errors == 6)
 				{
@@ -53,7 +53,7 @@ namespace AppJogoDaForca
 		private void ResetScreen()
 		{
 			_errors = 0;
-			imgMain.Source = ImageSource.FromFile("forca1.svg");
+			ImgMain.Source = ImageSource.FromFile("forca1.svg");
 
 			var repository = new WordRepositories();
 			_word = repository.GetRandomWord();

@@ -7,7 +7,7 @@
 
             <FlexLayout Direction="Column" JustifyContent="SpaceBetween">
                 <Image
-                    x:Name="imgMain"
+                    x:Name="ImgMain"
                     Source="forca1.svg"
                     HeightRequest="200" 
                     Margin="0, 20, 0, 0"
